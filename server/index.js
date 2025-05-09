@@ -67,6 +67,18 @@ app.put("/updateUsers/:id", async(req, res) =>{
 
 });
 
+app.delete("/deleteUsers/:id", async(req,res) => {
+    try{
+        const {id} = req.params;
+        const deletedUser = await UserModel.findByIdAndDelete(id);
+        res.json({message : "user deleted successfully"})
+
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error :"Internal server error"})
+    }
+})
+
 
 app.listen(PORT, () =>{
     console.log("Server is running");
