@@ -7,8 +7,11 @@ const cors = require("cors");
 
 app.use(express.json());
 app.use(cors());
+require("dotenv").config();
 
-mongoose.connect("mongodb+srv://nethuhasi2001:OSNuetw48ItTYYCB@cluster0.4xdxhad.mongodb.net/mernTutorial?retryWrites=true&w=majority&appName=Cluster0" , {
+PORT = process.env.PORT  || 3001;
+
+mongoose.connect( process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -42,17 +45,30 @@ app.post("/createUsers", async(req, res) => {
 
 
 
-    }catch{
+    }catch(err){
         console.error(err);
         res.status(500).json({error:"internal server error"});
 
     }
 })
 
+app.put("/updateUsers/:id", async(req, res) =>{
+    try{
+        const {id} = req.params;
+        const updatedUser = await UserModel.findByIdAndUpdate(id, req.body, {new:true})
+        res.json(updatedUser);
 
-app.listen(3001, () =>{
+
+    }catch(err){
+        console.error(err);
+        res.status(500).json({error :"Internal server error"})
+
+    }
+
+});
+
+
+app.listen(PORT, () =>{
     console.log("Server is running");
 })
 
-// OSNuetw48ItTYYCB - pw
-// nethuhasi2001 - username
